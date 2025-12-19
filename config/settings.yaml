@@ -1,0 +1,20 @@
+# WP-SEC-AUDIT Configuration
+
+scanning:
+  user_agent: "Mozilla/5.0 WP-SEC-AUDIT/3.0"
+  timeout: 30
+  threads: 5
+
+output:
+  save_reports: true
+  report_dir: "~/Desktop/WP-SEC-AUDIT-Results"
+  formats: ["html", "json"]
+
+logging:
+  level: "INFO"
+
+modules:
+  enabled:
+    - user_enumeration
+    - plugin_detection
+    - theme_detection
