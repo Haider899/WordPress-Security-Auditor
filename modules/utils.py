@@ -144,7 +144,7 @@ def check_dependencies():
     required = [
         ('requests', 'requests'),
         ('colorama', 'colorama'),
-        ('PyYAML', 'yaml'),
+        ('yaml', 'pyyaml'),  # ← FIXED: import 'yaml', package 'pyyaml'
         ('bs4', 'beautifulsoup4'),
         ('urllib3', 'urllib3')
     ]
