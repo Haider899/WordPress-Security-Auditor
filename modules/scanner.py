@@ -547,6 +547,8 @@ class WordPressScanner:
     
     def scan_subdomains(self, domain, subdomain_file=None):
         """Scan subdomains from file or generate common ones"""
+        import concurrent.futures
+        
         subdomains = []
         
         if subdomain_file:
@@ -571,10 +573,10 @@ class WordPressScanner:
         results = []
         print(f"[*] Scanning {len(subdomains)} subdomains...")
         
-        with ThreadPoolExecutor(max_workers=self.threads) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.threads) as executor:
             futures = {executor.submit(self._check_subdomain, sub): sub for sub in subdomains}
             
-            for future in as_completed(futures):
+            for future in concurrent.futures.as_completed(futures):
                 subdomain = futures[future]
                 try:
                     is_live, url = future.result()
