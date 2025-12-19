@@ -101,7 +101,7 @@ def perform_scan(target, config, output_format):
     print_info(f"Starting scan for: {target}")
     
     # Initialize scanner and perform scan
-    scanner = WordPressScanner(config)
+    scanner = WordPressScanner(config, logger=None)  # ← ADD logger=None
     results = scanner.quick_scan(target)
     
     # Generate report
