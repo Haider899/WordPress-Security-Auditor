@@ -1224,16 +1224,75 @@ class ReportGenerator:
         
         return min(score, 100)
     
-    def _get_risk_level(self, score):
-        """Get risk level based on score"""
+        def generate_detailed_scoring_report(self, results):
+        """Generate detailed scoring breakdown report"""
+        score = self._calculate_risk_score(results)
+        
+        report = []
+        report.append("="*70)
+        report.append("📊 INTELLIGENT RISK SCORING ANALYSIS")
+        report.append("="*70)
+        report.append(f"Target: {results.get('url', 'Unknown')}")
+        report.append(f"Final Risk Score: {score}/100")
+        report.append(f"Risk Level: {self._get_risk_level(score)}")
+        report.append("")
+        
+        report.append("🔍 SCORING SYSTEM FEATURES:")
+        report.append("  • Context-Aware: Considers vulnerability context and environment")
+        report.append("  • Dynamic: Adjusts based on quantity, severity, and combinations")
+        report.append("  • Intelligent: Recognizes patterns and compound risks")
+        report.append("  • Realistic: Matches real-world security risk assessment")
+        report.append("")
+        
+        # Add scoring breakdown based on actual findings
+        if results.get('users_exposed'):
+            users = results.get('users', [])
+            admin_count = sum(1 for u in users 
+                            if any(admin in str(u.get('username', '')).lower() 
+                                  for admin in ['admin', 'administrator']))
+            report.append(f"👥 User Enumeration: {len(users)} users ({admin_count} admins)")
+        
+        cves = results.get('cves', [])
+        if cves:
+            report.append(f"💀 CVEs Detected: {len(cves)} (Weighted by severity)")
+        
+        vulns = results.get('vulnerabilities', [])
+        if vulns:
+            report.append(f"⚠️ Vulnerabilities: {len(vulns)} (Context-based scoring)")
+        
+        files = results.get('sensitive_files', [])
+        if files:
+            critical_files = [f for f in files if 'wp-config' in f.get('path', '') or 'debug.log' in f.get('path', '')]
+            report.append(f"🔓 Sensitive Files: {len(files)} total, {len(critical_files)} critical")
+        
+        report.append("")
+        report.append("🎯 SECURITY ASSESSMENT:")
+        
         if score >= 70:
-            return "CRITICAL 🔴"
+            report.append("  🔴 CRITICAL RISK: Immediate action required")
+            report.append("    • Multiple critical vulnerabilities detected")
+            report.append("    • High probability of compromise")
+            report.append("    • Immediate remediation needed")
         elif score >= 40:
-            return "HIGH 🟡"
+            report.append("  🟡 HIGH RISK: Address within 48 hours")
+            report.append("    • Significant security issues found")
+            report.append("    • Potential for exploitation")
+            report.append("    • Priority remediation recommended")
         elif score >= 20:
-            return "MEDIUM 🟠"
+            report.append("  🟠 MEDIUM RISK: Address within 1 week")
+            report.append("    • Security improvements needed")
+            report.append("    • Moderate risk of exploitation")
+            report.append("    • Scheduled remediation advised")
         else:
-            return "LOW 🟢"
+            report.append("  🟢 LOW RISK: Monitor and maintain")
+            report.append("    • Minor security observations")
+            report.append("    • Low immediate risk")
+            report.append("    • Regular maintenance sufficient")
+        
+        report.append("")
+        report.append("="*70)
+        
+        return "\n".join(report)
     
     def _get_risk_display(self, score):
         """Get risk display properties for HTML"""
