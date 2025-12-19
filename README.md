@@ -32,7 +32,7 @@ python wp_sec_audit.py -b targets.txt
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/WordPress-Security-Auditor.git
+git clone https://github.com/Haider899/WordPress-Security-Auditor.git
 cd WordPress-Security-Auditor
 
 # Install dependencies
