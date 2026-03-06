@@ -50,11 +50,6 @@ python wp_sec_audit.py
 
 ```
 
-## **Step 3: Add Professional Footer**
-
-At the **end** of README.md (before the closing), add this beautiful footer:
-
-
 ---
 
 ## 🤝 Contributing
